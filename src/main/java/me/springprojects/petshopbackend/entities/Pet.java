@@ -18,6 +18,7 @@ public class Pet {
     private int id;
     private String name;
     private String breed;
+    @Enumerated(EnumType.STRING)
     private PetType type;
     private BigDecimal price;
 }
