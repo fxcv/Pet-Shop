@@ -9,6 +9,8 @@ import me.springprojects.petshopbackend.repositories.PetRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -34,6 +36,19 @@ public class PetService {
         pet.setPrice(petPrice);
 
         petRepository.save(pet);
+    }
+
+    public List<PetDTO> fetchAllPets(){
+        return petRepository.findAll().stream()
+                                      .map(pet -> {
+                                          PetDTO petDTO = new PetDTO();
+                                          petDTO.setName(pet.getName());
+                                          petDTO.setBreed(pet.getBreed());
+                                          petDTO.setType(pet.getType().toString());
+                                          petDTO.setPrice(pet.getPrice());
+                                          return petDTO;
+                                      })
+                                      .collect(Collectors.toList());
     }
 
     private PetType valueOfPetType(String s){
