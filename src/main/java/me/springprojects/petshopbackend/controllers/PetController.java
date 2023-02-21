@@ -14,13 +14,18 @@ public class PetController {
 
     private final PetService petService;
 
-    @PostMapping("/add")
+    @PostMapping(path = "/add")
     public void addPet(@RequestBody PetDTO petDTO){
         petService.addPet(petDTO);
     }
 
-    @GetMapping("/all")
+    @GetMapping(path = "/all")
     public List<PetDTO> fetchAllPets(){
         return petService.fetchAllPets();
+    }
+
+    @GetMapping(path = "/get")
+    public PetDTO getPetById(@RequestParam(name = "id") int id){
+        return petService.getPetById(id);
     }
 }

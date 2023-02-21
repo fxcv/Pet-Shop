@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -108,6 +109,30 @@ class PetServiceTest {
         assertEquals(pet2.getType().toString(), petDTO2.getType());
         assertEquals(pet1.getPrice(), petDTO1.getPrice());
         assertEquals(pet2.getPrice(), petDTO2.getPrice());
+    }
+
+    @Test
+    public void getsPetById(){
+        Pet pet = new Pet();
+        pet.setName("Max");
+        pet.setBreed("Golden Retriever");
+        pet.setType(PetType.DOG);
+        pet.setPrice(BigDecimal.valueOf(100));
+        given(petRepository.findById(any())).willReturn(Optional.of(pet));
+
+        PetDTO petDTO = petService.getPetById(999);
+
+        assertEquals(pet.getName(), petDTO.getName());
+        assertEquals(pet.getBreed(), petDTO.getBreed());
+        assertEquals(pet.getType().toString(), petDTO.getType());
+        assertEquals(pet.getPrice(), petDTO.getPrice());
+    }
+
+    @Test
+    public void throwsExceptionWhenPetByIdNotFound(){
+        given(petRepository.findById(any())).willReturn(Optional.empty());
+
+        assertThrows(InvalidPetException.class, () -> petService.getPetById(999));
     }
 
 }
